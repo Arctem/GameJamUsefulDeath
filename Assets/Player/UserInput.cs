@@ -18,8 +18,11 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	private void LeftMouseClick() {
+		Camera camera = transform.root.GetComponentInChildren<Camera>();
 		Bullet clone;
-		clone = (Bullet) Instantiate(bullet, transform.position + gameObject.transform.forward, transform.rotation);
-		clone.rigidbody.velocity = transform.forward * 5;
+		clone = (Bullet) Instantiate(bullet,
+			camera.transform.position + camera.transform.forward,
+			camera.transform.rotation);
+		clone.rigidbody.velocity = camera.transform.forward * 10;
 	}
 }
