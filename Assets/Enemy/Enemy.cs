@@ -6,7 +6,9 @@ public class Enemy : MonoBehaviour {
 	CharacterController controller;
 	GameObject player;
 	private Vector3 moveDirection = Vector3.zero;
-	private bool pounced = false;
+	
+	public int health;
+	
 
 	// Use this for initialization
 	void Start() {
@@ -26,5 +28,14 @@ public class Enemy : MonoBehaviour {
 	
 		
 		controller.Move(moveDirection * Time.deltaTime);
+	}
+	
+	public bool Damage(int dmg) {
+		health -= dmg;
+		if(health <= 0) {
+			Destroy(gameObject);
+			return true;
+		}
+		return false;
 	}
 }
