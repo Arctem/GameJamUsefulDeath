@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 	
-	public float velocity = 0.0f;
+	public int lifetime;
 
 	// Use this for initialization
 	void Start () {
@@ -12,7 +12,9 @@ public class Bullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		lifetime--;
+		if(lifetime <= 0)
+			Destroy (gameObject);
 	}
 	
 	void OnCollisionEnter(Collision collision) {

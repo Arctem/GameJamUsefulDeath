@@ -5,6 +5,8 @@ public class Enemy : MonoBehaviour {
 	
 	CharacterController controller;
 	GameObject player;
+	private Vector3 moveDirection = Vector3.zero;
+	private bool pounced = false;
 
 	// Use this for initialization
 	void Start() {
@@ -14,10 +16,15 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-		Vector3 move = player.transform.position - transform.position;
+		Vector3 toPlayer = player.transform.position - transform.position;
 		transform.LookAt(player.transform);
 		
-		if(!Physics.Raycast(transform.position, move, move.magnitude))
-			controller.SimpleMove(move.normalized);
+		if(!Physics.Raycast(transform.position, toPlayer, toPlayer.magnitude)) {
+			moveDirection = toPlayer.normalized * 5;
+		} else
+			moveDirection = Vector3.zero;
+	
+		
+		controller.Move(moveDirection * Time.deltaTime);
 	}
 }
