@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour {
 	
 	public int health;
 	
+	enum AIMode {Wander, Circle, Charge};
+	AIMode mode = AIMode.Wander;
+	
 
 	// Use this for initialization
 	void Start() {
