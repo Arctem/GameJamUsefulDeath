@@ -14,7 +14,8 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-		Vector3 move = (player.transform.position - transform.position).normalized;
-		controller.SimpleMove(move);
+		Vector3 move = player.transform.position - transform.position;
+		Physics.Raycast(move, )
+		controller.SimpleMove(move.normalized);
 	}
 }
