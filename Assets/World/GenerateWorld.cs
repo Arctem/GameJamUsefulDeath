@@ -4,6 +4,7 @@ using System.Collections;
 public class GenerateWorld : MonoBehaviour {
 	
 	public Wall wall;
+	public Box box;
 	public Plant outsideTree;
 	
 	// Use this for initialization
@@ -14,6 +15,14 @@ public class GenerateWorld : MonoBehaviour {
 		for(int i = 0; i < 100; i++) {
 			Instantiate(wall,
 				new Vector3(Random.Range(-worldSize, worldSize), 2,
+				Random.Range(-worldSize, worldSize)),
+				Random.rotation);
+		}
+		
+		for(int i = 0; i < 200; i++) {
+			Instantiate(box,
+				new Vector3(Random.Range(-worldSize, worldSize),
+				Random.Range(20, 100),
 				Random.Range(-worldSize, worldSize)),
 				Random.rotation);
 		}
