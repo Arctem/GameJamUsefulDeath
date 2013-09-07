@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		
-		if(!(collision.collider is Player))
+		if(!(collision.gameObject is Player))
 			Destroy(gameObject);
 	}
 }
