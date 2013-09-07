@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		Vector3 move = player.transform.position - transform.position;
+		transform.
 		
 		if(!Physics.Raycast(transform.position, move, move.magnitude))
 			controller.SimpleMove(move.normalized);

@@ -4,6 +4,7 @@ using FPS;
 
 public class UserInput : MonoBehaviour {
 	private Player player;
+	public Bullet bullet;
 
 	// Use this for initialization
 	void Start () {
@@ -12,14 +13,13 @@ public class UserInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if(Input.GetMouseButtonDown(0))
+			LeftMouseClick();
 	}
 	
-	private void MoveCamera() {
-		
-	}
-	
-	private void RotateCamera() {
-		
+	private void LeftMouseClick() {
+		Bullet clone;
+		clone = (Bullet) Instantiate(bullet, transform.position + gameObject.transform.forward, transform.rotation);
+		clone.rigidbody.velocity = transform.forward * 5;
 	}
 }

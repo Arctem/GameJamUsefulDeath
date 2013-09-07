@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Bullet : MonoBehaviour {
+	
+	public float velocity = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -10,6 +12,11 @@ public class Bullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+	}
 	
+	void OnCollisionEnter(Collision collision) {
+		if(!(collision.collider is Player))
+			Destroy(gameObject);
 	}
 }
