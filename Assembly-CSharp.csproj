@@ -46,6 +46,13 @@
   <ItemGroup>
      <Compile Include="Assets\Player\Player.cs" />
      <Compile Include="Assets\Player\UserInput.cs" />
+     <Compile Include="Assets\ResourceManager\ResourceManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{8AFA9E59-DC0D-4BE8-6554-C4B2DAC7DB6F}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{E62105DA-0F62-E5FD-6E7C-6C96B8E26C66}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
