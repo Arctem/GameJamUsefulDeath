@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
 	
 	private GameObject food;
 	private int eatProgress = 0;
-	public int eatTime = 1200;
+	public int eatTime = 2400;
 	
 	private Vector3 lastPos;
 	private float lastCheckTime = 0;

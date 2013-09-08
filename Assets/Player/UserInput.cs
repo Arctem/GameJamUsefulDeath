@@ -34,7 +34,7 @@ public class UserInput : MonoBehaviour {
 			if(hit.collider.tag == "Gun") {
 				player.gameObject.GetComponent<Player>().setIsGun(true);
 				if(Input.GetKeyDown("e")) {
-					Destroy(hit.collider.gameObject);
+					Destroy(hit.collider.gameObject.transform.parent.gameObject);
 					player.hasGun++;
 					Vector3 spawnLocation;
 					int worldSize = GameObject.Find("Ground").GetComponent<GenerateWorld>().worldSize;
