@@ -18,6 +18,9 @@ public class UserInput : MonoBehaviour {
 		if(Input.GetMouseButtonDown(0))
 			LeftMouseClick();
 		
+		if(Input.GetKeyDown(KeyCode.L))
+			player.Damage(1);
+		
 		RaycastHit[] hits;
 		hits = Physics.CapsuleCastAll(camera.transform.position,
 			camera.transform.position + camera.transform.forward * 0.5f,
@@ -39,7 +42,7 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	private void LeftMouseClick() {
-		if(player.hasGun >= player.maxGun) {
+		if(player.hasGun >= player.maxGun && !player.Dead()) {
 			Bullet clone;
 			clone = (Bullet) Instantiate(bullet,
 				camera.transform.position + camera.transform.forward,

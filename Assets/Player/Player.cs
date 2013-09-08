@@ -4,18 +4,46 @@ using System.Collections;
 public class Player : MonoBehaviour {
 	
 	public int health = 1;
+	private bool dead;
 	private bool isGun;
 	public int hasGun = 0;
 	public int maxGun = 2;
+	
+	public Ragdoll ragdoll;
+	public Gun gun;
+	private CharacterController controller;
 
 	// Use this for initialization
 	void Start () {
 		isGun = false;
+		dead = false;
+		controller = transform.root.GetComponent<CharacterController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(!dead && health <= 0) {
+			dead = true;
+			Instantiate(ragdoll, transform.position, transform.rotation);
+			for(int i  = 0; i < hasGun; i++) {
+				Instantiate(gun, transform.position +  transform.up * i,
+					Random.rotation);
+			}
+			hasGun = 0;
+			transform.root.GetComponent<CharacterMotor>().movement.gravity = 0;
+
+			//controller.enabled = false;
+		}
+		if(dead) {
+			transform.root.GetComponentInChildren<Camera>().gameObject.
+				transform.LookAt(transform.position - transform.up);
+			if(transform.position.y < 3)
+				controller.Move(Vector3.up / 2);
+		} else {
+			transform.root.GetComponent<CharacterMotor>().movement.gravity = 20;
+			transform.root.GetComponent<MouseLook>().enabled = true;
+			transform.root.GetComponentInChildren<MouseLook>().enabled = true;
+		}
 	}
 	
 	void OnGUI() {
@@ -26,7 +54,20 @@ public class Player : MonoBehaviour {
 			GUI.TextArea(new Rect(10, 10, 150, 25), "Collected "
 				+ hasGun + " of " + maxGun + " parts.");
 		else
-			GUI.TextArea(new Rect(10, 10, 30, 25), "Gun get.");
+			GUI.TextArea(new Rect(10, 10, 50, 25), "Gun get.");
+		
+		
+	}
+	
+	public bool Damage(int dmg) {
+		health -= dmg;
+		if(health == 0)
+			return true;
+		return false;
+	}
+	
+	public bool Dead() {
+		return dead;
 	}
 	
 	public void setIsGun(bool b) {

@@ -8,6 +8,10 @@ public class Enemy : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 destination = Vector3.zero;
 	
+	private GameObject food;
+	private int eatProgress = 0;
+	public int eatTime = 600;
+	
 	private Vector3 lastPos;
 	private float lastCheckTime = 0;
 	private float checkTime = 1f;
@@ -15,7 +19,7 @@ public class Enemy : MonoBehaviour {
 	
 	public int health;
 	
-	enum AIMode {None, Wander, Circle, Charge, Eating};
+	enum AIMode {None, Wander, Circle, Charge, Eat};
 	private AIMode nextMode = AIMode.Wander;
 	private AIMode mode = AIMode.Wander;
 	private AIMode prevMode = AIMode.None;
@@ -68,7 +72,7 @@ public class Enemy : MonoBehaviour {
 			
 			if(!Physics.Raycast(transform.position, toPlayer, toPlayer.magnitude))
 				watchCount++;
-			if(watchCount >= 400)
+			if(watchCount >= 10)
 				nextMode = AIMode.Charge;
 			
 			int rotation = -90;
@@ -99,6 +103,38 @@ public class Enemy : MonoBehaviour {
 			if(notMoving)
 				nextMode = AIMode.Wander;
 			break;
+			
+		case AIMode.Eat:
+			if(prevMode != AIMode.Eat) {
+				food = null;
+				eatProgress = 0;
+				foreach(GameObject r in GameObject.FindGameObjectsWithTag("Corpse"))
+					if(food == null)
+						food = r;
+					else
+						if((transform.position - r.transform.position).magnitude < 
+							(transform.position - food.transform.position).magnitude)
+							food = r;
+			}
+			transform.LookAt(food.transform.FindChild("Hips").transform);
+			if((transform.position - food.transform.FindChild("Hips").
+				transform.position).magnitude > .5)
+				rigidbody.velocity = transform.forward.normalized;
+			else {
+				eatProgress++;
+				//print(eatProgress);
+				print(food);
+				if(eatProgress >= eatTime) {
+					Destroy(food);
+					food = null;
+					eatProgress = 0;
+					nextMode = AIMode.Wander;
+				}
+			}
+				
+			
+				
+			break;
 		}
 		prevMode = mode;
 		mode = nextMode;
@@ -114,6 +150,10 @@ public class Enemy : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision) {
 		destination = Vector3.zero;
+		if(collision.collider.gameObject.tag == "Player") {
+			GameObject.Find("Player").GetComponent<Player>().Damage(1);
+			nextMode = AIMode.Eat;
+		}
 	}
 	
 	//Returns true if not moving.
