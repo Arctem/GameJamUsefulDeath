@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour {
 	
 	public int health;
 	
-	enum AIMode {None, Wander, Circle, Charge};
+	enum AIMode {None, Wander, Circle, Charge, Eating};
 	AIMode nextMode = AIMode.Wander;
 	AIMode mode = AIMode.Wander;
 	AIMode prevMode = AIMode.None;
@@ -27,11 +27,16 @@ public class Enemy : MonoBehaviour {
 		Vector3 toPlayer = player.transform.position - transform.position;
 		//rigidbody.AddForce(toPlayer.normalized * 5);
 		//transform.LookAt(player.transform);
+		print (toPlayer.magnitude);
 		
 		switch(mode) {
+		case AIMode.None:
+			mode = AIMode.Wander;
+			break;
 		case AIMode.Wander:
 			Vector3 toDestination = destination - transform.position;
-			if(destination == Vector3.zero || prevMode != AIMode.Wander || toDestination.magnitude < 1) {
+			if(destination == Vector3.zero || prevMode != AIMode.Wander
+				|| toDestination.magnitude < 1) {
 				destination = transform.position +
 					new Vector3(Random.Range(-10, 10), 0,
 						Random.Range(-10, 10));
@@ -46,10 +51,20 @@ public class Enemy : MonoBehaviour {
 			}
 			break;
 		case AIMode.Circle:
-			transform.LookAt(player.transform);
-			rigidbody.velocity = toPlayer.normalized * 6;
+			Vector3 route = Quaternion.Euler(0, -90, 0) * toPlayer;
+			
+			//If too far away, wander. Otherwise, try to reach distance of 25.
+			//If we get too close... I dunno. Might panic or something.
+			if(toPlayer.magnitude > 40)
+				nextMode = AIMode.Wander;
+			if(toPlayer.magnitude < 40 && toPlayer.magnitude > 10)
+				route = Quaternion.Euler(0, -90 - 3 * (35 - toPlayer.magnitude), 0) * toPlayer;
+			transform.LookAt(transform.position + route);
+			rigidbody.velocity = route.normalized * 6;
 			break;
 		case AIMode.Charge:
+			transform.LookAt(player.transform);
+			rigidbody.velocity = toPlayer.normalized * 6;
 			break;
 		}
 		prevMode = mode;
