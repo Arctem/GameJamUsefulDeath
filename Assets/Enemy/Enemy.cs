@@ -70,9 +70,12 @@ public class Enemy : MonoBehaviour {
 			if(prevMode != AIMode.Circle)
 				watchCount = 0;
 			
+			if(player.GetComponent<Player>().Dead())
+				nextMode = AIMode.Wander;
+			
 			if(!Physics.Raycast(transform.position, toPlayer, toPlayer.magnitude))
 				watchCount++;
-			if(watchCount >= 10)
+			if(watchCount >= 400)
 				nextMode = AIMode.Charge;
 			
 			int rotation = -90;
@@ -118,7 +121,7 @@ public class Enemy : MonoBehaviour {
 			}
 			transform.LookAt(food.transform.FindChild("Hips").transform);
 			if((transform.position - food.transform.FindChild("Hips").
-				transform.position).magnitude > .5)
+				transform.position).magnitude > 1)
 				rigidbody.velocity = transform.forward.normalized;
 			else {
 				eatProgress++;

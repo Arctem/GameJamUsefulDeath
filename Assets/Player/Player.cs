@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 	public int health = 1;
 	private bool dead;
 	private bool isGun;
+	private int deadCount = 0;
 	public int hasGun = 0;
 	public int maxGun = 2;
 	
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour {
 	void Update () {
 		if(!dead && health <= 0) {
 			dead = true;
+			deadCount = 0;
 			Instantiate(ragdoll, transform.position, transform.rotation);
 			for(int i  = 0; i < hasGun; i++) {
 				Instantiate(gun, transform.position +  transform.up * i,
@@ -35,10 +37,16 @@ public class Player : MonoBehaviour {
 			//controller.enabled = false;
 		}
 		if(dead) {
-			transform.root.GetComponentInChildren<Camera>().gameObject.
-				transform.LookAt(transform.position - transform.up);
-			if(transform.position.y < 3)
-				controller.Move(Vector3.up / 2);
+			//transform.root.GetComponentInChildren<Camera>().gameObject.
+			//	transform.LookAt(transform.position - transform.up);
+			controller.Move(Vector3.up / 2);
+			deadCount++;
+			if(deadCount > 200) {
+				dead = false;
+				health = 1;
+				controller.Move(new Vector3(Random.Range(-40, 40),
+					15, Random.Range(-40, 40)) - transform.position);
+			}
 		} else {
 			transform.root.GetComponent<CharacterMotor>().movement.gravity = 20;
 			transform.root.GetComponent<MouseLook>().enabled = true;

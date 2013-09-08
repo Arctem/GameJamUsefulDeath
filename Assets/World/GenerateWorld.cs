@@ -7,6 +7,7 @@ public class GenerateWorld : MonoBehaviour {
 	public int numBoxes = 200;
 	public int numGuns = 5;
 	
+	public int worldSize;
 	public Wall wall;
 	public Box box;
 	public Plant outsideTree;
@@ -14,7 +15,7 @@ public class GenerateWorld : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		int worldSize = (int) transform.localScale.x * 5;
+		worldSize = (int) transform.localScale.x * 5;
 		
 		for(int i = 0; i < numWalls; i++) {
 			Instantiate(wall,
@@ -39,18 +40,18 @@ public class GenerateWorld : MonoBehaviour {
 			Instantiate(gun, location, Random.rotation);
 		}
 		
-		for(int i = 0; i < 20; i++) {
+		for(int i = 0; i < transform.localScale.x; i++) {
 			Instantiate (outsideTree,
-				new Vector3(110, 10, 95 - 10 * i),
+				new Vector3(worldSize + 10, 10, worldSize - 5 - 10 * i),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(-110, 10, 95 - 10 * i),
+				new Vector3(-worldSize - 10, 10, worldSize - 5 - 10 * i),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(95 - 10 * i, 10, 110),
+				new Vector3(worldSize - 5 - 10 * i, 10, worldSize + 10),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(95 - 10 * i, 10, -110),
+				new Vector3(worldSize - 5 - 10 * i, 10, -worldSize - 10),
 				Quaternion.identity);
 		}
 	}
