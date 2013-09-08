@@ -15,6 +15,8 @@ public class GenerateWorld : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		Screen.showCursor = false;
+		
 		worldSize = (int) transform.localScale.x * 5;
 		print ("World size: " + worldSize);
 		
