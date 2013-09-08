@@ -16,6 +16,7 @@ public class GenerateWorld : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		worldSize = (int) transform.localScale.x * 5;
+		print ("World size: " + worldSize);
 		
 		for(int i = 0; i < numWalls; i++) {
 			Instantiate(wall,

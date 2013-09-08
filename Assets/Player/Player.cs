@@ -23,6 +23,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		RenderSettings.fogDensity = 0.03f + 0.01f * hasGun;
+		
 		if(!dead && health <= 0) {
 			dead = true;
 			deadCount = 0;
@@ -64,7 +66,7 @@ public class Player : MonoBehaviour {
 		else
 			GUI.TextArea(new Rect(10, 10, 50, 25), "Gun get.");
 		
-		if(!GameObject.Find("Enemy")) {
+		if(!GameObject.FindGameObjectWithTag("Enemy")) {
 			GUI.TextArea(new Rect(100, 100, 250, 25), "You have vanquished the SPooooKY!");
 			GetComponent<UserInput>().enabled = false;
 		}

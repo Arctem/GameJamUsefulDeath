@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 destination = Vector3.zero;
 	
+	public AudioClip chargeSound;
+	
 	private GameObject food;
 	private int eatProgress = 0;
 	public int eatTime = 600;
@@ -52,10 +54,13 @@ public class Enemy : MonoBehaviour {
 		case AIMode.Wander:
 			Vector3 toDestination = destination - transform.position;
 			if(destination == Vector3.zero || prevMode != AIMode.Wander
-				|| toDestination.magnitude < 1) {
-				destination = transform.position +
-					new Vector3(Random.Range(-10, 10), 0,
-						Random.Range(-10, 10));
+				|| toDestination.magnitude < 1 || notMoving) {
+				destination = Quaternion.Euler(0, Random.Range(-45, 45), 0) *
+					toPlayer.normalized *
+					Random.Range(toPlayer.magnitude / 2, toPlayer.magnitude);
+				//destination = transform.position +
+				//	new Vector3(Random.Range(-100, 100), 0,
+				//		Random.Range(-100, 100));
 				destination.y = 1;
 			}
 			transform.LookAt(destination);
@@ -98,8 +103,10 @@ public class Enemy : MonoBehaviour {
 				reverseCircle = !reverseCircle;
 			break;
 		case AIMode.Charge:
-			if(prevMode != AIMode.Charge)
+			if(prevMode != AIMode.Charge) {
 				moveDirection = toPlayer.normalized;
+				AudioSource.PlayClipAtPoint(chargeSound, Camera.main.transform.position);
+			}
 			transform.LookAt(transform.position + moveDirection);
 			rigidbody.velocity = moveDirection.normalized * 20;
 			
