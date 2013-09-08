@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour {
 	public int forgetRadius = 40;
 	public int panicRadius = 5;
 	private bool reverseCircle = false;
+	private int watchCount = 0;
 	
 
 	// Use this for initialization
@@ -57,29 +58,35 @@ public class Enemy : MonoBehaviour {
 			}
 			break;
 		case AIMode.Circle:
-			int rotation = -90;
+			if(prevMode != AIMode.Circle)
+				watchCount = 0;
 			
+			if(!Physics.Raycast(transform.position, toPlayer, toPlayer.magnitude))
+				watchCount++;
+			if(watchCount >= 400)
+				nextMode = AIMode.Charge;
+			
+			int rotation = -90;
 			//If too far away, wander. Otherwise, try to reach distance of 25.
 			//If we get too close... I dunno. Might panic or something.
 			if(toPlayer.magnitude > forgetRadius)
 				nextMode = AIMode.Wander;
 			if(toPlayer.magnitude < forgetRadius /*&& toPlayer.magnitude > panicRadius*/)
-				//route = Quaternion.Euler(0, -90 - 3 * (35 - toPlayer.magnitude), 0) * toPlayer;
 				rotation = -90 - 3 * (circleRadius - (int) toPlayer.magnitude);
 			
 			if(reverseCircle)
 				rotation *= -1;
 			
-			if(Physics.Raycast(transform.position, transform.forward, 1))
-				reverseCircle = !reverseCircle;
-			
 			Vector3 route = Quaternion.Euler(0, rotation, 0) * toPlayer;
 			transform.LookAt(transform.position + route);
 			rigidbody.velocity = route.normalized * 8;
+			
+			if(Physics.Raycast(transform.position, transform.forward, 1))
+				reverseCircle = !reverseCircle;
 			break;
 		case AIMode.Charge:
 			transform.LookAt(player.transform);
-			rigidbody.velocity = toPlayer.normalized * 6;
+			rigidbody.velocity = toPlayer.normalized * 20;
 			break;
 		}
 		prevMode = mode;

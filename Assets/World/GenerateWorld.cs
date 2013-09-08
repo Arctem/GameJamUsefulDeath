@@ -10,7 +10,6 @@ public class GenerateWorld : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		int worldSize = (int) transform.localScale.x * 5;
-		print (worldSize);
 		
 		for(int i = 0; i < 100; i++) {
 			Instantiate(wall,
@@ -26,25 +25,23 @@ public class GenerateWorld : MonoBehaviour {
 				Random.rotation);
 		}
 		
-		for(int i = 0; i < 10; i++) {
-			Plant tree;
+		for(int i = 0; i < 20; i++) {
 			Instantiate (outsideTree,
-				new Vector3(110, 10, Random.Range (-100, 100)),
+				new Vector3(110, 10, 95 - 10 * i),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(-110, 10, Random.Range (-100, 100)),
+				new Vector3(-110, 10, 95 - 10 * i),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(Random.Range (-100, 100), 10, 110),
+				new Vector3(95 - 10 * i, 10, 110),
 				Quaternion.identity);
 			Instantiate (outsideTree,
-				new Vector3(Random.Range (-100, 100), 10, -110),
+				new Vector3(95 - 10 * i, 10, -110),
 				Quaternion.identity);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }
