@@ -5,8 +5,6 @@ using FPS;
 public class UserInput : MonoBehaviour {
 	private Player player;
 	public Bullet bullet;
-	public int hasGun = 0;
-	public int maxGun = 2;
 	private Camera camera;
 
 	// Use this for initialization
@@ -28,12 +26,12 @@ public class UserInput : MonoBehaviour {
 		player.gameObject.GetComponent<Player>().setIsGun(false);
 		for(int i = 0; i < hits.Length; i++) {
 			RaycastHit hit = hits[i];
-			print(hit.collider.gameObject.name);
+
 			if(hit.collider.tag == "Gun") {
 				player.gameObject.GetComponent<Player>().setIsGun(true);
 				if(Input.GetKeyDown("e")) {
 					Destroy(hit.collider.gameObject);
-					hasGun++;
+					player.hasGun++;
 					player.gameObject.GetComponent<Player>().setIsGun(false);
 				}
 			} //end if gun in hits
@@ -41,7 +39,7 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	private void LeftMouseClick() {
-		if(hasGun >= maxGun) {
+		if(player.hasGun >= player.maxGun) {
 			Bullet clone;
 			clone = (Bullet) Instantiate(bullet,
 				camera.transform.position + camera.transform.forward,

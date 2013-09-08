@@ -91,8 +91,13 @@ public class Enemy : MonoBehaviour {
 				reverseCircle = !reverseCircle;
 			break;
 		case AIMode.Charge:
-			transform.LookAt(player.transform);
-			rigidbody.velocity = toPlayer.normalized * 20;
+			if(prevMode != AIMode.Charge)
+				moveDirection = toPlayer.normalized;
+			transform.LookAt(transform.position + moveDirection);
+			rigidbody.velocity = moveDirection.normalized * 20;
+			
+			if(notMoving)
+				nextMode = AIMode.Wander;
 			break;
 		}
 		prevMode = mode;
