@@ -34,7 +34,8 @@ public class GenerateWorld : MonoBehaviour {
 		for(int i = 0; i < numGuns; i++) {
 			Vector3 location = new Vector3(1, 0, 0) *
 				Random.Range(worldSize / 2, worldSize);
-			location = Quaternion.Euler(0, Random.Range(0, 360), 0) * location;
+			location = Quaternion.Euler(0, i * 360 / numGuns +
+				Random.Range(0, 360 / numGuns), 0) * location;
 			location.y = 2;
 			
 			Instantiate(gun, location, Random.rotation);

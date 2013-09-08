@@ -45,7 +45,7 @@ public class Player : MonoBehaviour {
 				dead = false;
 				health = 1;
 				controller.Move(new Vector3(Random.Range(-40, 40),
-					15, Random.Range(-40, 40)) - transform.position);
+					40, Random.Range(-40, 40)) - transform.position);
 			}
 		} else {
 			transform.root.GetComponent<CharacterMotor>().movement.gravity = 20;
@@ -64,7 +64,10 @@ public class Player : MonoBehaviour {
 		else
 			GUI.TextArea(new Rect(10, 10, 50, 25), "Gun get.");
 		
-		
+		if(!GameObject.Find("Enemy")) {
+			GUI.TextArea(new Rect(100, 100, 250, 25), "You have vanquished the SPooooKY!");
+			GetComponent<UserInput>().enabled = false;
+		}
 	}
 	
 	public bool Damage(int dmg) {

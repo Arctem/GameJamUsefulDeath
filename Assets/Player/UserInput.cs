@@ -5,6 +5,7 @@ using FPS;
 public class UserInput : MonoBehaviour {
 	private Player player;
 	public Bullet bullet;
+	public Enemy enemy;
 	private Camera camera;
 
 	// Use this for initialization
@@ -35,6 +36,15 @@ public class UserInput : MonoBehaviour {
 				if(Input.GetKeyDown("e")) {
 					Destroy(hit.collider.gameObject);
 					player.hasGun++;
+					Vector3 spawnLocation;
+					int worldSize = GameObject.Find("Ground").GetComponent<GenerateWorld>().worldSize;
+					do {
+						spawnLocation = new Vector3(Random.Range(-worldSize, worldSize),
+							2, Random.Range(-worldSize, worldSize));
+					} while((spawnLocation - player.transform.position).magnitude < 60);
+					
+					Instantiate(enemy, spawnLocation, Quaternion.identity);
+					
 					player.gameObject.GetComponent<Player>().setIsGun(false);
 				}
 			} //end if gun in hits
