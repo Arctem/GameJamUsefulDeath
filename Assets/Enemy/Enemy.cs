@@ -11,9 +11,15 @@ public class Enemy : MonoBehaviour {
 	public int health;
 	
 	enum AIMode {None, Wander, Circle, Charge, Eating};
-	AIMode nextMode = AIMode.Wander;
-	AIMode mode = AIMode.Wander;
-	AIMode prevMode = AIMode.None;
+	private AIMode nextMode = AIMode.Wander;
+	private AIMode mode = AIMode.Wander;
+	private AIMode prevMode = AIMode.None;
+	
+	public int circleRadius = 30;
+	public int noticeRadius = 35;
+	public int forgetRadius = 40;
+	public int panicRadius = 5;
+	private bool reverseCircle = false;
 	
 
 	// Use this for initialization
@@ -45,22 +51,31 @@ public class Enemy : MonoBehaviour {
 			transform.LookAt(destination);
 			rigidbody.velocity = toDestination.normalized * 5;
 			
-			if(toPlayer.magnitude < 30 && 
+			if(toPlayer.magnitude < noticeRadius && 
 				!Physics.Raycast(transform.position, toPlayer, toPlayer.magnitude)) {
 				nextMode = AIMode.Circle;
 			}
 			break;
 		case AIMode.Circle:
-			Vector3 route = Quaternion.Euler(0, -90, 0) * toPlayer;
+			int rotation = -90;
 			
 			//If too far away, wander. Otherwise, try to reach distance of 25.
 			//If we get too close... I dunno. Might panic or something.
-			if(toPlayer.magnitude > 40)
+			if(toPlayer.magnitude > forgetRadius)
 				nextMode = AIMode.Wander;
-			if(toPlayer.magnitude < 40 && toPlayer.magnitude > 10)
-				route = Quaternion.Euler(0, -90 - 3 * (35 - toPlayer.magnitude), 0) * toPlayer;
+			if(toPlayer.magnitude < forgetRadius /*&& toPlayer.magnitude > panicRadius*/)
+				//route = Quaternion.Euler(0, -90 - 3 * (35 - toPlayer.magnitude), 0) * toPlayer;
+				rotation = -90 - 3 * (circleRadius - (int) toPlayer.magnitude);
+			
+			if(reverseCircle)
+				rotation *= -1;
+			
+			if(Physics.Raycast(transform.position, transform.forward, 1))
+				reverseCircle = !reverseCircle;
+			
+			Vector3 route = Quaternion.Euler(0, rotation, 0) * toPlayer;
 			transform.LookAt(transform.position + route);
-			rigidbody.velocity = route.normalized * 6;
+			rigidbody.velocity = route.normalized * 8;
 			break;
 		case AIMode.Charge:
 			transform.LookAt(player.transform);
