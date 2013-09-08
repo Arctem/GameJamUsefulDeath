@@ -8,6 +8,11 @@ public class Enemy : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 destination = Vector3.zero;
 	
+	private Vector3 lastPos;
+	private float lastCheckTime = 0;
+	private float checkTime = 1f;
+	private float moveDist = 1f;
+	
 	public int health;
 	
 	enum AIMode {None, Wander, Circle, Charge, Eating};
@@ -32,9 +37,9 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		Vector3 toPlayer = player.transform.position - transform.position;
-		//rigidbody.AddForce(toPlayer.normalized * 5);
-		//transform.LookAt(player.transform);
-		print (toPlayer.magnitude);
+		
+		bool notMoving = CheckMovement();
+		
 		
 		switch(mode) {
 		case AIMode.None:
@@ -81,7 +86,8 @@ public class Enemy : MonoBehaviour {
 			transform.LookAt(transform.position + route);
 			rigidbody.velocity = route.normalized * 8;
 			
-			if(Physics.Raycast(transform.position, transform.forward, 1))
+			//if(Physics.Raycast(transform.position, transform.forward, 1))
+			if(notMoving)
 				reverseCircle = !reverseCircle;
 			break;
 		case AIMode.Charge:
@@ -103,6 +109,20 @@ public class Enemy : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision) {
 		destination = Vector3.zero;
+	}
+	
+	//Returns true if not moving.
+	private bool CheckMovement() {
+		if((Time.time - lastCheckTime) > checkTime) {
+			float dist = (transform.position - lastPos).magnitude;
+			lastCheckTime = Time.time;
+			lastPos = transform.position;
+			
+			if(dist < moveDist) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public bool Damage(int dmg) {
