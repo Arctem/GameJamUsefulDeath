@@ -23,6 +23,6 @@ public class UserInput : MonoBehaviour {
 		clone = (Bullet) Instantiate(bullet,
 			camera.transform.position + camera.transform.forward,
 			camera.transform.rotation);
-		clone.rigidbody.velocity = camera.transform.forward * 10;
+		clone.rigidbody.velocity = camera.transform.forward * 40;
 	}
 }
