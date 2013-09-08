@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
 	
 	private GameObject food;
 	private int eatProgress = 0;
-	public int eatTime = 600;
+	public int eatTime = 1200;
 	
 	private Vector3 lastPos;
 	private float lastCheckTime = 0;
@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour {
 		
 		switch(mode) {
 		case AIMode.None:
-			mode = AIMode.Wander;
+			nextMode = AIMode.Wander;
 			break;
 		case AIMode.Wander:
 			Vector3 toDestination = destination - transform.position;

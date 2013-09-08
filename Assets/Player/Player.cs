@@ -28,6 +28,11 @@ public class Player : MonoBehaviour {
 		if(!dead && health <= 0) {
 			dead = true;
 			deadCount = 0;
+			
+			foreach(AudioSource a  in Camera.main.GetComponents<AudioSource>()) {
+				if(a.clip.name == "spooky")
+					a.Play();
+			}
 			Instantiate(ragdoll, transform.position, transform.rotation);
 			for(int i  = 0; i < hasGun; i++) {
 				Instantiate(gun, transform.position +  transform.up * i,
